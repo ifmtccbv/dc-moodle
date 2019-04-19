@@ -28,9 +28,25 @@ services:
       - 'moodle_data:/bitnami'
     depends_on:
       - 'mariadb'
+  phpmyadmin:
+    container_name: 'moodle_web2'
+    image: 'bitnami/phpmyadmin:4.8.3'
+    restart: 'always'
+    environment:
+      - DATABASE_HOST=mariadb
+      - DATABASE_PORT=3306
+    ports:
+      - '8090:80'
+      - '8091:443'
+    volumes:
+      - 'phpmyadmin_data:/bitnami'
+    depends_on:
+      - 'moodle'
 
 volumes:
   mariadb_data:
     driver: 'local'
   moodle_data:
+    driver: 'local'
+  phpmyadmin_data:
     driver: 'local'
