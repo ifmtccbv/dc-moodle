@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: 'moodle_sql'
+    image: 'bitnami/mariadb:10.1.37'
+    restart: 'always'
+    volumes:
+      - 'mariadb_data:/bitnami'
+    environment:
+      - MARIADB_USER=bitnami_moodle
+      - MARIADB_DATABASE=bitnami_moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+  moodle:
+    container_name: 'moodle_web1'
+    image: 'bitnami/moodle:3.5.2'
+    restart: 'always'
+    environment:
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=bitnami_moodle
+      - MOODLE_DATABASE_NAME=bitnami_moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '8080:80'
+      - '8081:443'
+    volumes:
+      - 'moodle_data:/bitnami'
+    depends_on:
+      - 'mariadb'
+
+volumes:
+  mariadb_data:
+    driver: 'local'
+  moodle_data:
+    driver: 'local'
