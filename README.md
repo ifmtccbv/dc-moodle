@@ -1,13 +1,13 @@
-# Moodle ( Docker )
+# Moodle (Docker Compose)
 
 Iniciar:
 
 ```
-docker-compose -p ifmt up -d
+docker-compose -p moodle up -d
 ```
 
 Parar:
 
 ```
-docker-compose -p ifmt down
+docker-compose -p moodle down
 ```
