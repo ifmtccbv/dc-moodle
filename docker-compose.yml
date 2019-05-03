@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mariadb:
-    container_name: 'moodle_sql'
+    container_name: 'mariadb'
     image: 'bitnami/mariadb:10.1.37'
     restart: 'always'
     volumes:
@@ -11,8 +11,10 @@ services:
       - MARIADB_USER=bitnami_moodle
       - MARIADB_DATABASE=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
+    networks:
+      - moodle
   moodle:
-    container_name: 'moodle_web1'
+    container_name: 'moodle'
     image: 'bitnami/moodle:3.5.2'
     restart: 'always'
     environment:
@@ -22,26 +24,30 @@ services:
       - MOODLE_DATABASE_NAME=bitnami_moodle
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
-      - '8080:80'
-      - '8081:443'
+      - '80:80'
+      - '443:443'
     volumes:
       - 'moodle_data:/bitnami'
     depends_on:
       - 'mariadb'
+    networks:
+      - moodle
   phpmyadmin:
-    container_name: 'moodle_web2'
+    container_name: 'phpmyadmin'
     image: 'bitnami/phpmyadmin:4.8.3'
     restart: 'always'
     environment:
       - DATABASE_HOST=mariadb
       - DATABASE_PORT=3306
     ports:
-      - '8090:80'
-      - '8091:443'
+      - '8080:80'
+      - '8443:443'
     volumes:
       - 'phpmyadmin_data:/bitnami'
     depends_on:
       - 'moodle'
+    networks:
+      - moodle
 
 volumes:
   mariadb_data:
@@ -50,3 +56,7 @@ volumes:
     driver: 'local'
   phpmyadmin_data:
     driver: 'local'
+
+networks:
+  moodle:
+    driver: 'bridge'
