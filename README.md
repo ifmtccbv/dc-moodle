@@ -3,11 +3,11 @@
 Iniciar:
 
 ```
-docker-compose -p moodle up -d
+docker-compose -p ifmt up -d
 ```
 
 Parar:
 
 ```
-docker-compose -p moodle down
+docker-compose -p ifmt down
 ```
