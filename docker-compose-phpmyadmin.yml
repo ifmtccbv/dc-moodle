@@ -32,6 +32,22 @@ services:
       - 'mariadb'
     networks:
       - moodle
+  phpmyadmin:
+    container_name: 'phpmyadmin'
+    image: 'bitnami/phpmyadmin:4.8.3'
+    restart: 'always'
+    environment:
+      - DATABASE_HOST=mariadb
+      - DATABASE_PORT=3306
+    ports:
+      - '8080:80'
+      - '8443:443'
+    volumes:
+      - 'phpmyadmin_data:/bitnami'
+    depends_on:
+      - 'moodle'
+    networks:
+      - moodle
 
 volumes:
   mariadb_data:
