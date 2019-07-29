@@ -1,4 +1,4 @@
-PROJECT := moodle
+PROJECT := ifmt
 
 restart: stop start
 
