@@ -35,17 +35,11 @@ services:
 
 volumes:
   mariadb_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NFS_SERVER},rw,hard,nolock,proto=tcp
-      device: ":/nfs/volumes/mariadb"
+    driver: 'local'
   moodle_data:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: addr=${NFS_SERVER},rw,hard,nolock,proto=tcp
-      device: ":/nfs/volumes/moodle"
+    driver: 'local'
+  phpmyadmin_data:
+    driver: 'local'
 
 networks:
   moodle:

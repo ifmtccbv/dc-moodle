@@ -1,9 +1,0 @@
-version: '3.7'
-
-volumes:
-  mariadb_data:
-    driver: 'local'
-  moodle_data:
-    driver: 'local'
-  phpmyadmin_data:
-    driver: 'local'
