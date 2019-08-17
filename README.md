@@ -5,19 +5,29 @@
 Iniciar:
 
 ```
-docker-compose -p moodle up -d
+make start
 ```
 
 Parar:
 
 ```
-docker-compose -p moodle down
+make stop
 ```
 
-### NFS
+Ativar configuração NFS
 
-Crie um arquivo .env e adcione a variavél abaixo e coloque o ip do servidor
+```
+make nfs-on
+```
+
+Desativar configuração NFS
+
+```
+make nfs-off
+```
+
+### Suporte ao servidor NFS
+
+Crie o arquivo .env e adcione a variavél abaixo e coloque o ip do servidor
 
 NFS_SERVER=<ip_do_servidor>
-
-Em seguida renomeie o arquivo docker-compose-nfs.yml para docker-compose.override.yml
