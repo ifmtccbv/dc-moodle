@@ -1,0 +1,15 @@
+version: '3.7'
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: rw,vers=3,hard,proto=tcp,addr=${NFS_SERVER},nolock
+      device: ":/nfs2"
+  moodle_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: rw,vers=3,hard,proto=tcp,addr=${NFS_SERVER},nolock
+      device: ":/nfs2"
