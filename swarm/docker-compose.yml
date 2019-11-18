@@ -1,0 +1,82 @@
+version: '3.7'
+
+services:
+
+  visualizer:
+    image: dockersamples/visualizer:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    deploy:
+      placement:
+        constraints: [node.role==manager]
+    networks:
+      - moodle
+
+  moodle_sql:
+    image: 'bitnami/mariadb:10.1.37'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role==manager]
+    environment:
+      - MARIADB_USER=bitnami_moodle
+      - MARIADB_DATABASE=bitnami_moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '3306:3306'
+    volumes:
+      - 'moodle_sql:/bitnami'
+    networks: 
+      - moodle
+    depends_on:
+      - visualizer
+
+  moodle_web:
+    image: 'bitnami/moodle:3.5.2'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role==worker]
+    environment:
+      - MARIADB_HOST=10.13.100.101
+      - MARIADB_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=bitnami_moodle
+      - MOODLE_DATABASE_NAME=bitnami_moodle
+      - ALLOW_EMPTY_PASSWORD=yes
+      #- MOODLE_SKIP_INSTALL=yes
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - 'moodle_web:/bitnami'
+    networks: 
+      - moodle
+    depends_on:
+      - moodle_sql
+
+volumes:
+
+  moodle_sql:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: 'addr=10.13.100.21,nolock,rw'
+      device: ':/nfs2/sql'
+
+  moodle_web:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: 'addr=10.13.100.21,nolock,rw'
+      device: ':/nfs2/web'
+
+networks:
+
+  moodle:
+    driver: overlay
